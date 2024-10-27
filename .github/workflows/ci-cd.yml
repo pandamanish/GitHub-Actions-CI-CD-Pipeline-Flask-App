@@ -1,78 +1,21 @@
-name: CI/CD Pipeline for Flask App
+name: Check Python Versions
 
-on:
-  push:
-    branches:
-      - staging
-  release:
-    types:
-      - created
+on: [push]
 
 jobs:
-  install-dependencies:
+  check-python-versions:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install Flask
-          pip install pytest
-          
-
-  run-tests:
-    needs: install-dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Run tests
-        run: python -m pytest
-
-  build:
-    needs: run-tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build application
-        run: echo "Build step (optional, customize as needed)"
-
-  deploy-staging:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/staging'
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Configure AWS credentials for staging
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2  # Specify your AWS region
-      - name: Deploy to staging
-        run: |
-          # Insert AWS CLI deployment commands here for staging
-          echo "Deploying to staging..."
-
-  deploy-production:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Configure AWS credentials for production
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2  # Specify your AWS region
-      - name: Deploy to production
+          python-version: '3.x' # You can replace this with any version you want to check
+      - name: Check Python version
+        run: python --version
+      - name: Check installed Python versions
         run: |
-          # Insert AWS CLI deployment commands here for production
-          echo "Deploying to production..."
+          for version in $(ls /opt/python/); do
+            echo "Available Python version: $version"
+          done
