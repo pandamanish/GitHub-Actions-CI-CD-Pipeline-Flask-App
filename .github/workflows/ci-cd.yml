@@ -21,14 +21,24 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-           pip install -r requirements.txt  # Install all dependencies from requirements.txt
+          pip install -r requirements.txt  # Ensure you're using the requirements.txt file
 
   run-tests:
     needs: install-dependencies
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Reinstall dependencies in this job
       - name: Run tests
-        run: python -m pytest
+        run: python -m pytest  # Run the tests
 
   build:
     needs: run-tests
