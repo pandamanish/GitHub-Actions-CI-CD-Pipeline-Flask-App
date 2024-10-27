@@ -30,7 +30,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Run tests
-        run: pytest
+        run: |
+          python -m pytest
 
   build:
     needs: run-tests
