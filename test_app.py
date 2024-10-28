@@ -11,7 +11,7 @@ def test_hello_route(client):
     # Test the '/' route
     response = client.get('/')
     assert response.status_code == 200
-    assert response.data.decode('utf-8') == 'Hello, World!'
+    assert response.data.decode('utf-8') == 'Hello, Duniya!'
 
 def test_add_route(client):
     # Test the '/add/<int:a>/<int:b>' route
