@@ -39,7 +39,7 @@ jobs:
       - name: Run Tests
         run: |
           pip install -r requirements.txt
-          pytest  # Assumes your tests are managed by pytest
+          pytest test_app.py # Assumes your tests are managed by pytest
 
   build:
     runs-on: ubuntu-latest
