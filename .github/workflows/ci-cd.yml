@@ -68,9 +68,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /path/to/staging/deployment
+            cd /home/ubuntu/flask_app  # Adjust the path as necessary
             git pull origin staging
-            # Any additional deployment steps, e.g., restarting services
+            # Install dependencies if required
+            pip install -r requirements.txt
+            # Restart the Flask app using systemctl
+            sudo systemctl restart flask_app
 
   deploy-production:
     runs-on: ubuntu-latest
@@ -87,6 +90,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /path/to/production/deployment
+            cd /home/ubuntu/flask_app  # Adjust the path as necessary
             git pull origin main
-            # Any additional deployment steps, e.g., restarting services
+            # Install dependencies if required
+            pip install -r requirements.txt
+            # Restart the Flask app using systemctl
+            sudo systemctl restart flask_app
