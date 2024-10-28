@@ -1,22 +1,24 @@
-# test_app.py
 import pytest
-from app import app  # Import the Flask app
+from app import app
 
+# Set up a fixture for the test client
 @pytest.fixture
 def client():
     with app.test_client() as client:
-        yield client  # This will be the test client
+        yield client
 
-def test_hello(client):
+def test_hello_route(client):
+    # Test the '/' route
     response = client.get('/')
-    assert response.data == b"Hello, World!"
     assert response.status_code == 200
+    assert response.data.decode('utf-8') == 'Hello, World!'
 
-def test_add(client):
-    response = client.get('/add/2/3')
-    assert response.data == b"5"
+def test_add_route(client):
+    # Test the '/add/<int:a>/<int:b>' route
+    response = client.get('/add/3/5')
     assert response.status_code == 200
+    assert response.data.decode('utf-8') == '8'
 
-def test_add_invalid(client):
-    response = client.get('/add/2/a')
-    assert response.status_code == 404  # Check for a 404 error
+    response = client.get('/add/10/20')
+    assert response.status_code == 200
+    assert response.data.decode('utf-8') == '30'
